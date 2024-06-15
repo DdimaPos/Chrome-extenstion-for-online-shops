@@ -3,36 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Chat UI</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="wrapper">
-    <div class="chat-container">
-        <!--Dialog with user-->
-        <div class="dialog">
-            <h1>Hello. What category of products you would like to choose on this website</h1>
-            some text
-                <!-- will change the content here depending on server response -->
-                
-            
-        </div>
-        <!--Get actions from user-->
-        <div class="chat_wrapper">
-            <div class="chat-window" id="chat-window">
-                <form action="">
-                    <input class="user_prompt" type="text" placeholder="Text to introduce">
-                    <input class="submit_button" type="button" value="Send">
-                </form>
-            </div>
-            <div class="buttons">
-                <button class="skip_button">Skip</button>
-                <button class="help_button">Help</button>
-                <button class="next_button">Next</button>
-            </div>
-        </div>
         
+        <div class="chat-container">
+            <div class="chat-header">
+                <div id="domain"></div>
+                <div class="status-indicator"></div>
+                <div class="header-text">SmartChoice</div>
+                <button class="logout-button">Logout</button>
+            </div>
+            <div class="chat-window" id="chat-window">
+                <div class="message bot">
+                    <p>Hi, how can I help you?</p>
+                </div>
+                <div class="message user">
+                    <p>How are you?</p>
+                </div>
+                <div class="message bot">
+                    <p>Fine thanks!</p>
+                </div>
+                <div class="message user">
+                    <p>Where are you?</p>
+                </div>
+                <div class="message bot">
+                    <p>I'm in Shamsipour College!</p>
+                </div>
+            </div>
+            <form class="input-form">
+                <input class="user-prompt" type="text" placeholder="Ask your question...">
+                    <button class="send-button" type="submit">
+                        <img src="css/assets/send.svg" alt="submit">
+                    </button>
+            </form>
+            <div class="buttons">
+                <button class="skip-button">Skip</button>
+                <button class="help-button">Help</button>
+                <button class="next-button">Next</button>
+            </div>
+        </div>
     </div>
+    <script src="js/script.js"></script>
+
 </body>
-<script src="js/script.js"></script>
 </html>

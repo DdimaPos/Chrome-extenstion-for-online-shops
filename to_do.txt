@@ -1,0 +1,6 @@
+1. add icons for our extention in manifest json 
+2. send and recieve message from server
+3. handle the incoming html code to be shown to user
+4. make only the first prompt to be validated. Dialog box can be present but inactive
+
+

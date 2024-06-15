@@ -1,0 +1,14 @@
+{
+    "name": "Smart Choice",
+    "description": "Give advices to users about marfa",
+    "version": "1.0",
+    "manifest_version": 3,
+    "icons": {},
+    "action": {
+        "default_popup":"popup.html"
+    },
+    "permissions": [
+        "http://192.168.137.144:5000",
+    ],
+    "background":{}
+}

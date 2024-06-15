@@ -7,7 +7,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    border-radius: 25px 25px 0px 0px;
+    border-radius: 75px 75px 0px 0px;
 }
 
 .wrapper {
@@ -16,11 +16,11 @@ body {
     align-items: center;
     height: 100%;
     width: 100%;
-    border-radius: 25px 25px 0px 0px
+    border-radius: 50px 50px 0px 0px
 }
 
 .chat-container {
-    background-color: #1a1a1a;
+    background-color: #282828;
     width: 400px;
     border-radius: 10px;
     overflow: hidden;
@@ -32,7 +32,7 @@ body {
 
 .chat-header {
     background-color: #bb00ff;
-    padding: 2px;
+    padding: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -97,14 +97,17 @@ body {
     display: flex;
     border-top: 1px solid #8800cc;
     padding: 5px;
-    background-color: #1a1a1a;
+    background-color: #282828;
+    border-top-style: solid #ACACAC;
+    border-right-style: solid #282828;
+    border-bottom-style: solid #ACACAC;
+    border-left-style: solid #282828;
 }
 
 .user-prompt {
     flex-grow: 1;
     border: none;
-    padding: 10px;
-    border-radius: 20px;
+    padding: 0px;
     outline: none;
 }
 
@@ -112,9 +115,8 @@ body {
     display: flex;
     justify-content: space-around;
     padding: 10px;
-    background-color: #1a1a1a;
+    background-color: #282828;
 }
-
 button {
     background-color: #BA68C8;
     border: none;

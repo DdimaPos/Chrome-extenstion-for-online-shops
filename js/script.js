@@ -1,4 +1,3 @@
-
 /*chrome.tabs.query({active: true, windowId: chrome.windows.WINDOW_ID_CURRENT}, tabs => {
     const activeTabId = tabs[0].id;
     chrome.storage.sync.get(null, () => {
@@ -9,36 +8,57 @@
     });
 });*/
 const send_button=document.querySelector('.send-button');
+let site_url;
 
-send_button.addEventListener("click", ()=>{
-    preventDefault()
-    let user_prompt=document.querySelector('.user_prompt').value;
+send_button.addEventListener("click", (ev)=>{
+    ev.preventDefault()
+    let user_prompt=document.querySelector('.user-prompt').value;
     //send prompt to server
     Send_prompt(user_prompt);
     //console.log(user_prompt);
 });
-function Extract_url() {
-    document.addEventListener('DOMContentLoaded', () => {
-        chrome.runtime.sendMessage({ type: 'getCurrentTabUrl' }, response => {
-          if (chrome.runtime.lastError) {
+
+document.addEventListener('DOMContentLoaded', () => {
+    chrome.runtime.sendMessage({ type: 'getCurrentTabUrl' }, response => {
+        if (chrome.runtime.lastError) {
             console.error(chrome.runtime.lastError);
             return;
-          }
-          const url = response.url;
-          console.log(url)
-          return url;
-          //console.log(url);
-          
-        });
+        }
+        site_url = response.url;
+        //console.log(site_url);
     });
+});
+
+function ProcessUrl (unprocessed){
+    //console.log(unprocessed)
+    //console.log("called")
+    
+    let hostname = unprocessed.split("://")[1];
+    let index = hostname.indexOf('/');
+    //console.log(index)
+    hostname = hostname.substring(0, index)
+    //console.log(hostname)
+    if (hostname.startsWith('www.')) {
+        hostname = hostname.slice(4);
+    }
+
+    return hostname;
+    
 }
 
 
 const Send_prompt = (prompt) =>{
     const url = 'http://192.168.234.4:5000/';
-    const data = {prompt_sent: prompt};
-    let current_url= Extract_url()
-    console.log(current_url)
+    //console.log(site_url)
+    site_url_processed=ProcessUrl(site_url);
+    //console.log(site_url_processed)
+    
+    const data = {
+        prompt_sent: prompt,
+        pageurl: site_url_processed
+    };
+    //console.log(data)
+    //console.log(current_url)
     fetch(url, {
         method: 'POST', // or 'PUT'
         headers: {

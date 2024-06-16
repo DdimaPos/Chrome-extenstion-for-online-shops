@@ -1,10 +1,15 @@
 
 const send_button=document.querySelector('.send-button');
 const help_button=document.querySelector('.help-button');
+const comparison_button=document.querySelector('.comparison-button');
+const close_popup_button=document.querySelector(".close_popup")
 let current_option=0;
 let site_url;
 let quizz_data;
-
+close_popup_button.addEventListener('click', ()=>{
+    closePopup();
+    
+});
 document.addEventListener('DOMContentLoaded', () => {
     chrome.runtime.sendMessage({ type: 'getCurrentTabUrl' }, response => {
         if (chrome.runtime.lastError) {
@@ -36,8 +41,48 @@ send_button.addEventListener("click", (ev)=>{
     //console.log(user_prompt);
 });
 
+comparison_button.addEventListener("click", ()=>{
+    if(comparison_button.classList.contains("active-button")){
+       GetTabel(); 
+    }else return;
+});
 
-
+const GetTabel = () =>{
+    const url = 'http://192.168.234.4:5000';
+    const data = {
+        type: "table",
+        //prompt_sent: prompt,
+        //pageurl: site_url_processed
+    };
+    fetch(url, {
+        method: 'POST', // or 'PUT'
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'tipo token avtorizatii'
+        },
+        body: JSON.stringify(data) // body data type must match "Content-Type" header
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        //console.log(response)
+        return response.json(); // parses JSON response into native JavaScript objects
+    })
+    .then(responseData => {
+        console.log(responseData); // handle the data from the response
+        //update the content of dialog page
+        //ShowTable(responseData)
+    })
+    .catch(error => {
+        console.error('Error returned', error); // handle error
+        //ShowTable()
+    });
+}
+const ShowTable =()=>{
+    console.log("show table called")
+    //showPopup()
+}
 function ProcessUrl (unprocessed){
     //console.log(unprocessed)
     //console.log("called")
@@ -120,7 +165,7 @@ const Send_answers = (answer_arr) => {
         return response.json(); // parses JSON response into native JavaScript objects
     })
     .then(responseData => {
-        console.log(responseData); // handle the data from the response
+        //console.log(responseData); // handle the data from the response
         Show_final_data(responseData);
         //update the content of dialog page
         //Update_content(responseData)
@@ -146,7 +191,12 @@ const Show_final_data = (responseData) =>{
     });
     displayMessage(final_message)
 }
-
+const DisplayHelp = (currentStep, options) => {
+    console.log("display once")
+    console.log(currentStep)
+    console.log(options["helpinfo"][currentStep]);
+    showPopup(options["helpinfo"][currentStep])
+}
 const Update_content = (responseData) =>{
     const chatbox=document.querySelector('.chat-window');
     let options=responseData;
@@ -160,17 +210,24 @@ const Update_content = (responseData) =>{
         chatbox.appendChild(messageDiv);
         chatbox.scrollTop = chatbox.scrollHeight;
     }
-
+    help_button.addEventListener("click", ()=>{
+        console.log(currentStep);
+        DisplayHelp(currentStep, options)
+    });
     function showOptions(step) {
-        help_info=options[steps.length-1]
-        help_button.addEventListener("click", ()=>{
-            console.log(help_info[currentStep])
-        });
+        //console.log(options)
+        //console.log(options);
+        //console.log(steps.length)
+        //help_info=options['HELP_INFO']
+        ////////display the helping information
+        
         //add handling of helping information incoming
-        if (step < steps.length) {
+        if (step < steps.length-1) {
             const currentOptions = options[steps[step]];
-            let optionsText = `Please choose a ${steps[step]}:`;
-            setTimeout(() => {
+            //console.log(steps[step])
+            
+                let optionsText = `Please choose a ${steps[step]}:`;
+                setTimeout(() => {
                 displayMessage(optionsText);
                 const optionsContainer = document.createElement('div');
                 optionsContainer.className = 'option-buttons';
@@ -178,7 +235,9 @@ const Update_content = (responseData) =>{
                     
                     const button = document.createElement('button');
                     button.textContent = option;
+                    //console.log(option);
                     button.addEventListener('click', () => {
+                        
                         users_choices.push(option);
                         //console.log(users_choices);
                         displayMessage(option, false);
@@ -186,16 +245,21 @@ const Update_content = (responseData) =>{
                         currentStep++;
                         optionsContainer.remove();
                         showOptions(currentStep);
+                        
+                        
                     });
                     optionsContainer.appendChild(button);
                 });
                 chatbox.appendChild(optionsContainer);
                 chatbox.scrollTop = chatbox.scrollHeight;
             }, 500); // 500ms delay
+            
+            
 
             
         } else {
             Send_answers(users_choices);
+            document.querySelector('.comparison-button').classList.add("active-button");
             displayMessage("Thank you for making your selections!");
         }
     }
@@ -205,33 +269,30 @@ const Update_content = (responseData) =>{
 }
 
 
+function showPopup(code_to_show) {
+    //console.log(code_to_show)
+    let show_info=document.createElement('div');
+    show_info.textContent = code_to_show;
+    let popup_el = document.getElementById('popup');
+    
+    popup_el.style.display = 'block';
+    popup_el.appendChild(show_info);
+    //show_info.remove();
+    //console.log(show_info);
+}
 
-let next_button=document.querySelector(".next-button");
-next_button.addEventListener("click", () =>{
-    data={type:"response",
-        answers:["Low","Stainless","No steam","Lightweight"]}
-    const url = 'http://192.168.234.4:5000/';
-    fetch(url, {
-        method: 'POST', // or 'PUT'
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'tipo token avtorizatii'
-        },
-        body: JSON.stringify(data) // body data type must match "Content-Type" header
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        console.log(response)
-        return response.json(); // parses JSON response into native JavaScript objects
-    })
-    .then(responseData => {
-        console.log(responseData); // handle the data from the response
-        //update the content of dialog page
-        Update_content(responseData)
-    })
-    .catch(error => {
-        console.error('Error returned', error); // handle error
-    });
-});
+function closePopup() {
+    let popup_el = document.getElementById('popup');
+    //console.log(popup_el.lastChild);
+    popup_el.removeChild(popup_el.lastChild)
+    //popup_el.innerHTML=`<button class="close_popup">Close</button>`;
+
+    popup_el.style.display = 'none';
+}
+
+
+
+
+
+
+

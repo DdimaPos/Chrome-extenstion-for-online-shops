@@ -51,8 +51,8 @@ const GetTabel = () =>{
     const url = 'http://192.168.234.4:5000';
     const data = {
         type: "table",
-        //prompt_sent: prompt,
-        //pageurl: site_url_processed
+        prompt_sent: prompt,
+        pageurl: site_url_processed
     };
     fetch(url, {
         method: 'POST', // or 'PUT'
@@ -67,10 +67,11 @@ const GetTabel = () =>{
             throw new Error('Network response was not ok ' + response.statusText);
         }
         //console.log(response)
-        return response.json(); // parses JSON response into native JavaScript objects
+        return response.json();//.json(); // parses JSON response into native JavaScript objects
     })
     .then(responseData => {
-        console.log(responseData); // handle the data from the response
+        //console.log(responseData); // handle the data from the response
+        Inject_table(responseData);
         //update the content of dialog page
         //ShowTable(responseData)
     })
@@ -78,6 +79,19 @@ const GetTabel = () =>{
         console.error('Error returned', error); // handle error
         //ShowTable()
     });
+}
+const Inject_table = (jsonData) =>{
+    let htmlString = '';
+    for (let key in jsonData) {
+        htmlString += jsonData[key];
+    } 
+    // Create a new table element
+    const table = document.createElement('table');
+
+    // Set the innerHTML of the table to the collected HTML string
+    table.innerHTML = htmlString;
+    //console.log(table)
+    showTabelPopup(table);
 }
 const ShowTable =()=>{
     console.log("show table called")
@@ -272,6 +286,7 @@ const Update_content = (responseData) =>{
 function showPopup(code_to_show) {
     //console.log(code_to_show)
     let show_info=document.createElement('div');
+    show_info.classList.add("helping_text");
     show_info.textContent = code_to_show;
     let popup_el = document.getElementById('popup');
     
@@ -280,8 +295,31 @@ function showPopup(code_to_show) {
     //show_info.remove();
     //console.log(show_info);
 }
+function showTabelPopup(table){
+    console.log(table);
+    window.resizeBy(500, 500)
+    //document.querySelector('html').style.height=600;
+    //document.querySelector('html').style.width=600;
+    //browser.windows.getCurrent().then(window => {
+    //    browser.windows.update(window.id, { width: 500, height: 600 });
+    //});
+    //let show_info=document.createElement('div');
+    //show_info.classList.add("helping_text");
+    //show_info.innerHTML = table;
+    let popup_el = document.getElementById('popup');
+    document.querySelector("html").classList.add("table_active");
+    popup_el.style.display = 'block';
+    popup_el.appendChild(table);
+}
 
 function closePopup() {
+    if(document.querySelector("html").classList.contains("table_active")){
+        //browser.windows.getCurrent().then(window => {
+        //    browser.windows.update(window.id, { width: 400, height:  472});
+        //});
+        window.resizeBy(400, 437)
+        document.querySelector("html").classList.remove("table_active");
+    }
     let popup_el = document.getElementById('popup');
     //console.log(popup_el.lastChild);
     popup_el.removeChild(popup_el.lastChild)

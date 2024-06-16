@@ -1,7 +1,7 @@
 1. add icons for our extention in manifest json 
-2. send and recieve message from server
-3. order food
-4. handle the incoming html code to be shown to user
+2. send and recieve message from servercheck
+3. order food check
+4. handle the incoming html code to be shown to user check
 5. make only the first prompt to be validated. Dialog box can be present but inactive
 
 
